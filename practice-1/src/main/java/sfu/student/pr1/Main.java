@@ -25,6 +25,7 @@ public class Main {
           System.out.println("Ожидается ввод: ");
           sorter.acceptInputString(inputScanner.nextLine());
         }
+        case RANDOM_INPUT -> sorter.acceptInputString(RandomTextGenerator.generateRandomText());
         case EXECUTE -> sorter.sortInputString();
         case DISPLAY -> sorter.printResult();
         case EXIT -> exitFlag = false;

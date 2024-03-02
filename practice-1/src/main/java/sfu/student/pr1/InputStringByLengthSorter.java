@@ -6,7 +6,7 @@ import java.util.Objects;
 
 public class InputStringByLengthSorter {
 
-  public static final String REGEXP_WORDS = "[^A-zА-я]+";
+  public static final String REGEXP_WORDS = "[^A-Za-zА-я]+";
 
   private String inputString;
   private String[] stringArray;
@@ -26,7 +26,6 @@ public class InputStringByLengthSorter {
       System.out.println("Алгоритм не может быть выполнен без введенных данных!");
       return;
     }
-
     stringArray = inputString.split(REGEXP_WORDS);
     Arrays.sort(stringArray, Comparator.comparing(String::length));
   }

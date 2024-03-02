@@ -3,10 +3,11 @@ package sfu.student.pr1;
 import java.util.Optional;
 
 public enum MenuChoice {
-  INPUT("1", "Ввод данных"),
-  EXECUTE("2", "Выполнение алгоритма"),
-  DISPLAY("3", "Вывод результата"),
-  EXIT("4", "Выход");
+  INPUT("1", "Ввод данных вручную"),
+  RANDOM_INPUT("2", "Генерация данных случайным образом"),
+  EXECUTE("3", "Выполнение алгоритма"),
+  DISPLAY("4", "Вывод результата"),
+  EXIT("5", "Выход");
 
   private final String code;
   private final String text;
