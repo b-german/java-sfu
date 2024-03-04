@@ -1,3 +1,4 @@
 rootProject.name = 'java-sfu'
 include 'practice-1'
+include 'menu-cli'
 

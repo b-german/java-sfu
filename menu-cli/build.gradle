@@ -2,7 +2,7 @@ plugins {
     id 'java'
 }
 
-group = 'sfu.student.pr1'
+group = 'sfu.student'
 version = '1.0-SNAPSHOT'
 
 repositories {
@@ -10,8 +10,6 @@ repositories {
 }
 
 dependencies {
-    implementation project(':menu-cli')
-
     testImplementation platform('org.junit:junit-bom:5.9.1')
     testImplementation 'org.junit.jupiter:junit-jupiter'
 }
