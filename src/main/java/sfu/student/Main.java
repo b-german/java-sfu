@@ -11,7 +11,8 @@ public class Main {
   public static final String[] EMPTY_ARGS = {""};
   public static final String MENU = """
       Введите номер работы, чтобы её запустить.
-      1) Практическая работа 1""";
+      1) Практическая работа 1
+      2) Практическая работа 2""";
   public static final String NO_MENU_OPTION_TEMPLATE = "Пункта меню '%s' нет%n";
 
   public static void main(String[] args) {
@@ -25,6 +26,7 @@ public class Main {
 
       switch (input) {
         case "1" -> sfu.student.pr1.Main.main(EMPTY_ARGS);
+        case "2" -> sfu.student.pr2.Main.main(EMPTY_ARGS);
         case EXIT_COMMAND -> noop();
         default -> System.out.printf(NO_MENU_OPTION_TEMPLATE, input);
       }

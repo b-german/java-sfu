@@ -1,4 +1,4 @@
-package sfu.student;
+package sfu.student.pr2;
 
 import java.util.Scanner;
 

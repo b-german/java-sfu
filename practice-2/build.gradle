@@ -2,7 +2,7 @@ plugins {
     id 'java'
 }
 
-group = 'sfu.student'
+group = 'sfu.student.pr2'
 version = '1.0-SNAPSHOT'
 
 repositories {
