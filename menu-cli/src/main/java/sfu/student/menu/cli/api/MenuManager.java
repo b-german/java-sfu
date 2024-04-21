@@ -4,7 +4,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Scanner;
 
-public class MenuManager<T> {
+public class MenuManager<T extends Enum<?>> {
 
   private final MenuOption<T>[] options;
 

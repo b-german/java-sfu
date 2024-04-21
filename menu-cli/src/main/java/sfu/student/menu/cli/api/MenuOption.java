@@ -1,6 +1,6 @@
 package sfu.student.menu.cli.api;
 
-public interface MenuOption<EnumClass> {
+public interface MenuOption<EnumClass extends Enum<?>> {
 
   String getCode();
 
