@@ -1,8 +1,7 @@
 package sfu.student.pr1;
 
-import java.util.Objects;
-import java.util.Optional;
 import java.util.Scanner;
+import sfu.student.menu.cli.api.MenuManager;
 
 public class Main {
 
@@ -18,8 +17,8 @@ public class Main {
 
     boolean exitFlag = true;
     while (exitFlag) {
-      MenuChoice userChoice = getValidMenuChoice(inputScanner);
-
+      MenuManager<MenuChoice> menuManager = new MenuManager<>(MenuChoice.values());
+      MenuChoice userChoice = menuManager.getChoice(inputScanner);
       switch (userChoice) {
         case INPUT -> {
           System.out.println("Ожидается ввод: ");
@@ -31,21 +30,5 @@ public class Main {
         case EXIT -> exitFlag = false;
       }
     }
-  }
-
-  private static MenuChoice getValidMenuChoice(Scanner scanner) {
-    MenuChoice result = null;
-
-    while (Objects.isNull(result)) {
-      MenuChoice.print();
-      Optional<MenuChoice> choice = MenuChoice.findByCode(scanner.nextLine());
-      if (choice.isPresent()) {
-        result = choice.get();
-      } else {
-        System.out.println("Не найден введенный пункт меню!");
-      }
-    }
-
-    return result;
   }
 }
