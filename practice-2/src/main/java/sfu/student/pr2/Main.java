@@ -67,6 +67,7 @@ public class Main {
           trees.sortByField(field);
         }
         case EXIT -> exitFlag = true;
+        default -> System.out.println("Unreachable code");
       }
     }
   }
