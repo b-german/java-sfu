@@ -28,6 +28,7 @@ public class Main {
         case EXECUTE -> sorter.sortInputString();
         case DISPLAY -> sorter.printResult();
         case EXIT -> exitFlag = false;
+        default -> System.out.println("Unreachable code");
       }
     }
   }
