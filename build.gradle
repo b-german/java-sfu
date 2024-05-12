@@ -12,6 +12,7 @@ repositories {
 dependencies {
     implementation project('practice-1')
     implementation project('practice-2')
+    implementation project('practice-3')
 
     testImplementation platform('org.junit:junit-bom:5.9.1')
     testImplementation 'org.junit.jupiter:junit-jupiter'

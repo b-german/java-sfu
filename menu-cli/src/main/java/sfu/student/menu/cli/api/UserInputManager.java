@@ -1,4 +1,4 @@
-package sfu.student.pr2;
+package sfu.student.menu.cli.api;
 
 import java.util.Scanner;
 
@@ -11,7 +11,15 @@ public class UserInputManager {
   }
 
   public String getString() {
-    System.out.print("Введите значение: ");
+    return getString("Введите значение: ");
+  }
+
+  public String getString(String prompt) {
+    System.out.print(prompt);
+    return inputScanner.nextLine();
+  }
+
+  public String getStringSilent() {
     return inputScanner.nextLine();
   }
 
@@ -32,8 +40,12 @@ public class UserInputManager {
   }
 
   public Integer getInteger() {
+    return getInteger("Введите целое число: ");
+  }
+
+  public Integer getInteger(String prompt) {
     while (true) {
-      System.out.print("Введите целое число: ");
+      System.out.print(prompt);
       String intString = inputScanner.nextLine();
 
       int intValue;
