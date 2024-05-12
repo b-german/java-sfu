@@ -2,6 +2,7 @@ package sfu.student.pr2;
 
 import java.util.Scanner;
 import sfu.student.menu.cli.api.MenuManager;
+import sfu.student.menu.cli.api.UserInputManager;
 
 public class Main {
 

@@ -1,0 +1,17 @@
+plugins {
+    id 'java'
+}
+
+group = 'sfu.student.validation'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+}
+
+test {
+    useJUnitPlatform()
+}
