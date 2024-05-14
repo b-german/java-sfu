@@ -10,13 +10,13 @@ public class Square extends Rectangle {
   private final String color;
 
   public Square() {
-    super("ABCD", 1, 1);
+    super("ABCD", 1, 1, "Это квадрат");
     sideLength = 1;
     color = "Белый";
   }
 
   public Square(String nameByVertices, Integer sideLength, String color) {
-    super(nameByVertices, sideLength, sideLength);
+    super(nameByVertices, sideLength, sideLength, "Это квадрат");
     this.sideLength = sideLength;
     this.color = color;
   }
