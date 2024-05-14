@@ -47,7 +47,8 @@ public class Main {
             case RECTANGLE -> polygon =
                 fillValues ? new Rectangle(inputManager.getString("Введите название фигуры:"),
                     inputManager.getInteger("Введите длину:"),
-                    inputManager.getInteger("Введите ширину:")) : new Rectangle();
+                    inputManager.getInteger("Введите ширину:"),
+                    inputManager.getString("Введите комментарий к фигуре:")) : new Rectangle();
             case SQUARE -> polygon =
                 fillValues ? new Square(inputManager.getString("Введите название фигуры:"),
                     inputManager.getInteger("Введите длину стороны:"),
