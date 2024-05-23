@@ -14,6 +14,10 @@ public class Tree {
   private String whatGrowsOnTree;
 
   public Tree() {
+    setType(NOT_FILLED);
+    setWhatGrowsOnTree(NOT_FILLED);
+    setDiameterInCm(1);
+    setHeightInM(1.0f);
   }
 
   public Tree(int diameter, float height, String type, String whatGrowsOnTree)
@@ -113,7 +117,7 @@ public class Tree {
     if (floatVal <= 0 || floatVal > tallestTreeM) {
       final String msg = """
           Передана некорректная высота '%s'.
-          Высота должна быть >= 0 и не выше самой высокой секвойи 115.85м.
+          Высота должна быть больше 0 и не выше самой высокой секвойи 115.85м.
           """;
       throw new InvalidTreeFieldException(String.format(msg, floatVal));
     }
@@ -125,7 +129,7 @@ public class Tree {
     if (diameter <= 0 || diameter > biggestTreeDiameterCm) {
       String template = """
           Передан некорретный диаметр '%s'.
-          Диаметр должен быть >= 0 и не больше самого большого баобаба 10640см.
+          Диаметр должен быть больше 0 и не больше самого большого баобаба 10640см.
           """;
       throw new InvalidTreeFieldException(String.format(template, diameter));
     }
