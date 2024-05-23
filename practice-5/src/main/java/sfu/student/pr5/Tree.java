@@ -14,6 +14,10 @@ public class Tree {
   private String whatGrowsOnTree;
 
   public Tree() {
+    setType(NOT_FILLED);
+    setWhatGrowsOnTree(NOT_FILLED);
+    setDiameterInCm(1);
+    setHeightInM(1.0f);
   }
 
   public Tree(int diameter, float height, String type, String whatGrowsOnTree)
@@ -26,6 +30,7 @@ public class Tree {
       assert !type.isBlank();
       assert !whatGrowsOnTree.isBlank();
     } catch (InvalidTreeFieldException exception) {
+      //повторное генерирование и связывание в цепочку
       throw new InvalidTreeCreationException("Невозможно создать дерево, возникли ошибки!",
           exception);
     }
