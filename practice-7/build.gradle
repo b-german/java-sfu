@@ -1,0 +1,18 @@
+plugins {
+    id 'java'
+}
+
+group = 'sfu.student.pr7'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation project(':menu-cli')
+}
+
+test {
+    useJUnitPlatform()
+}
