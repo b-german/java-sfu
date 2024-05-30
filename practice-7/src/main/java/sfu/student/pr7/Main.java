@@ -1,19 +1,24 @@
 package sfu.student.pr7;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Base64;
 import java.util.DoubleSummaryStatistics;
 import java.util.IntSummaryStatistics;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Scanner;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import sfu.student.menu.cli.api.MenuManager;
 import sfu.student.menu.cli.api.UserInputManager;
 import sfu.student.pr7.exceptions.InvalidTreeCreationException;
@@ -165,7 +170,8 @@ public class Main {
               .map(Tree::getHeightInM)
               .reduce(Float::sum)
               .ifPresentOrElse(
-                  totalHeight -> logger.info("Высота всех деревьев равна %f".formatted(totalHeight)),
+                  totalHeight -> logger.info(
+                      "Высота всех деревьев равна %f".formatted(totalHeight)),
                   () -> logger.warning("Невозможно рассчитать высоту, деревьев нет!"));
           case GET_BY_INDEX_OPTIONAL -> {
             // Демонстрация умения работать с типом Optional
@@ -207,26 +213,15 @@ public class Main {
           }
           case SAVE_TO_DISK -> {
             String filename = inputManager.getString("Введите название файла сохранения: ");
-            try (FileOutputStream fos = new FileOutputStream(filename);
-                ObjectOutputStream oos = new ObjectOutputStream(fos)) {
-              oos.writeObject(trees);
-            } catch (IOException e) {
-              logger.throwing(Main.class.getSimpleName(), "Save_to_disk", e);
-            }
+            saveToDisk(trees, filename);
           }
           case LOAD_FROM_DISK -> {
             String filename = inputManager.getString("Введите название файла с коллекцией: ");
             if (Files.notExists(Path.of(filename))) {
-              logger.warning("Не найден файл по пути %s!".formatted(filename));
+              logger.warning(() -> "Не найден файл по пути %s!".formatted(filename));
               continue;
             }
-            try (FileInputStream fis = new FileInputStream(filename);
-                ObjectInputStream ois = new ObjectInputStream(fis)) {
-              trees = (TreeCollection) ois.readObject();
-            } catch (IOException | ClassNotFoundException e) {
-              logger.throwing(Main.class.getSimpleName(), "Load_from_disk", e);
-            }
-
+            trees.replaceList(readFromDisk(filename));
           }
           case FILTER -> {
             Integer integer = inputManager.getInteger();
@@ -241,6 +236,50 @@ public class Main {
       } catch (NoUserInputDataException e) {
         logger.warning(e.getMessage());
       }
+    }
+  }
+
+  private static List<Tree> readFromDisk(String filename) {
+    try (Stream<String> lines = Files.lines(Paths.get(filename))) {
+      return lines
+          .map(line -> {
+            try (ByteArrayInputStream bis = new ByteArrayInputStream(
+                Base64.getDecoder().decode(line));
+                ObjectInputStream ois = new ObjectInputStream(bis)) {
+              return (Tree) ois.readObject();
+            } catch (IOException | ClassNotFoundException e) {
+              throw new RuntimeException(
+                  "Не получилось десериализовать дерево! %s".formatted(e.getMessage()));
+            }
+          })
+          .toList();
+    } catch (IOException e) {
+      throw new RuntimeException(
+          "При чтении с диска возникла ошибка! %s".formatted(e.getMessage()));
+    }
+  }
+
+  private static void saveToDisk(TreeCollection trees, String filename)
+      throws NoUserInputDataException {
+    List<String> serializedTrees = trees.stream()
+        .map(tree -> {
+          try (ByteArrayOutputStream bos = new ByteArrayOutputStream();
+              ObjectOutputStream oos = new ObjectOutputStream(bos)) {
+            oos.writeObject(tree);
+            return Base64.getEncoder().encodeToString(bos.toByteArray());
+          } catch (IOException e) {
+            logger.warning(
+                "Не получилось сериализовать дерево! %s".formatted(tree.toString()));
+          }
+          return null;
+        })
+        .filter(Objects::nonNull)
+        .toList();
+    try {
+      Files.write(Paths.get(filename), serializedTrees);
+    } catch (IOException e) {
+      throw new RuntimeException(
+          "При сохранении на диск возникла ошибка! %s".formatted(e.getMessage()));
     }
   }
 }
