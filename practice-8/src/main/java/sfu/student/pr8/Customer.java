@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import javax.swing.JOptionPane;
 
 /**
  * Класс покупателя
@@ -37,7 +38,12 @@ public class Customer implements Runnable {
   public void run() {
     Cashier cashier = cashiers.get(RANDOM.nextInt(cashiers.size()));
     servicedSignal = new CountDownLatch(1);
-    cashier.acceptCustomer(this);
+    if (!cashier.acceptCustomer(this)) {
+      JOptionPane.showMessageDialog(null,
+          "Очередь, в которую попытался встать клиент, полна, попробуйте ещё раз");
+      return;
+    }
+
     while (!serviced) {
       try {
         serviced = servicedSignal.await(100, TimeUnit.MILLISECONDS);

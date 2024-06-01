@@ -5,16 +5,19 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.io.File;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.BlockingQueue;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import sfu.student.pr8.ui.CashierCard;
@@ -24,8 +27,12 @@ import sfu.student.pr8.ui.CashierCard;
  */
 public class SupermarketManagerFrame extends JFrame {
 
+  private static final String CASHIER_LABEL_TEMPLATE = "Количество кассиров: %s";
+  private static final String TIME_PER_CUSTOMER_LABEL_TEMPLATE = "Время на обслуживание: %s мс";
   private final JPanel cashierPanel = new JPanel();
   private final HashMap<Cashier, CashierCard> cashierCards = new HashMap<>();
+  private final JLabel cashiersCountLabel;
+  private final JLabel timePerCustomerLabel;
   private Supermarket supermarket;
   private final JButton startButton;
   private final JButton addCustomerButton;
@@ -43,6 +50,10 @@ public class SupermarketManagerFrame extends JFrame {
     setLayout(new BorderLayout());
 
     JPanel controlPanel = new JPanel();
+    cashiersCountLabel = new JLabel(CASHIER_LABEL_TEMPLATE.formatted(cashierCount));
+    timePerCustomerLabel = new JLabel(TIME_PER_CUSTOMER_LABEL_TEMPLATE.formatted(timePerCustomer));
+    controlPanel.add(cashiersCountLabel);
+    controlPanel.add(timePerCustomerLabel);
 
     startButton = new JButton("Открыть супермаркет");
     controlPanel.add(startButton);
@@ -88,9 +99,9 @@ public class SupermarketManagerFrame extends JFrame {
       SupermarketSettings supermarketSettings = XmlUtils.importFromXml(
           fileChooser.getSelectedFile());
       Optional.ofNullable(supermarketSettings.cashierCount())
-          .ifPresent(integer -> cashierCount = integer);
+          .ifPresent(this::setCashiersCount);
       Optional.ofNullable(supermarketSettings.timePerCustomer())
-          .ifPresent(integer -> timePerCustomer = integer);
+          .ifPresent(this::setTimePerCustomer);
     }
   }
 
@@ -105,15 +116,11 @@ public class SupermarketManagerFrame extends JFrame {
   }
 
   private void open() {
-    if (supermarket == null) {
-      try {
-        supermarket = new Supermarket(cashierCount, timePerCustomer, this);
-        startButton.setEnabled(false);
-        importMenuItem.setEnabled(false);
-        addCustomerButton.setEnabled(true);
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
+    if (Objects.isNull(supermarket)) {
+      supermarket = new Supermarket(cashierCount, timePerCustomer, this);
+      startButton.setEnabled(false);
+      importMenuItem.setEnabled(false);
+      addCustomerButton.setEnabled(true);
     }
   }
 
@@ -174,5 +181,18 @@ public class SupermarketManagerFrame extends JFrame {
    */
   public void runProgressBar(Cashier cashier, int duration) {
     cashierCards.get(cashier).runProgressBar(duration);
+  }
+
+  private void setCashiersCount(Integer integer) {
+    cashierCount = integer;
+    SwingUtilities.invokeLater(() -> cashiersCountLabel.setText(
+        CASHIER_LABEL_TEMPLATE.formatted(cashierCount)));
+  }
+
+  private void setTimePerCustomer(Integer integer) {
+    timePerCustomer = integer;
+    SwingUtilities.invokeLater(() -> timePerCustomerLabel.setText(
+        TIME_PER_CUSTOMER_LABEL_TEMPLATE.formatted(timePerCustomer)));
+
   }
 }

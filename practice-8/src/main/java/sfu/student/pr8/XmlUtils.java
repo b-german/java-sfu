@@ -2,6 +2,7 @@ package sfu.student.pr8;
 
 import java.io.File;
 import java.io.IOException;
+import javax.swing.JOptionPane;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -26,6 +27,14 @@ import org.xml.sax.SAXException;
  * Утилита для работы с XML
  */
 public class XmlUtils {
+
+  private static final String XML_VALIDATION_ERROR = """
+      Возникла ошибка при валидации XML-файла! Настройки не будут применены.
+      Допустимые значения для Cashiers [1;10]
+      Допустимые значения для TimePerCustomer [3000;10000] в милисекундах
+            
+      Текст ошибки валидации: %s
+      """;
 
   private XmlUtils() {
     throw new IllegalStateException("Utility class");
@@ -65,7 +74,10 @@ public class XmlUtils {
       StreamResult result = new StreamResult(selectedFile);
       transformer.transform(source, result);
     } catch (ParserConfigurationException | TransformerException e) {
-      e.printStackTrace();
+      JOptionPane.showMessageDialog(null,
+          "Возникла ошибка при выгрузке XML-файла!  %s".formatted(e.getMessage()),
+          "Ошибка конфигурации",
+          JOptionPane.ERROR_MESSAGE);
     }
   }
 
@@ -100,7 +112,11 @@ public class XmlUtils {
         }
       }
     } catch (ParserConfigurationException | SAXException | IOException e) {
-      e.printStackTrace();
+      JOptionPane.showMessageDialog(null,
+          "Возникла ошибка при парсинге XML-файла! Настройки не будут применены. %s".formatted(
+              e.getMessage()),
+          "Ошибка конфигурации",
+          JOptionPane.ERROR_MESSAGE);
     }
     return new SupermarketSettings(cashierCount, timePerCustomer);
   }
@@ -120,7 +136,10 @@ public class XmlUtils {
       validator.validate(new StreamSource(xmlFile));
       return true;
     } catch (SAXException | IOException e) {
-      e.printStackTrace();
+      JOptionPane.showMessageDialog(null,
+          XML_VALIDATION_ERROR.formatted(e.getMessage()),
+          "Ошибка конфигурации",
+          JOptionPane.ERROR_MESSAGE);
       return false;
     }
   }
